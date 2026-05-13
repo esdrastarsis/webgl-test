@@ -1,0 +1,272 @@
+/* ===================================================================
+   Visualizador 3D — Stylesheet
+   =================================================================== */
+
+/* ---------- Reset & Base ---------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Palette — dark futuristic */
+  --bg:          #0b0d13;
+  --surface:     rgba(16, 20, 30, 0.82);
+  --surface-alt: rgba(22, 28, 42, 0.75);
+  --accent:      #6c8cff;
+  --accent-glow: rgba(108, 140, 255, 0.35);
+  --text:        #e2e6f0;
+  --text-dim:    #8892a8;
+  --border:      rgba(108, 140, 255, 0.15);
+  --radius:      12px;
+  --font:        'Inter', system-ui, -apple-system, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: var(--font);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Canvas ---------- */
+#webgl-canvas {
+  display: block;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* ---------- Loading Overlay ---------- */
+#loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+#loading-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-content {
+  text-align: center;
+  max-width: 320px;
+  width: 90%;
+}
+
+/* Spinner */
+.spinner {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 24px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loader-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 18px;
+  letter-spacing: 0.02em;
+}
+
+.progress-bar-track {
+  width: 100%;
+  height: 4px;
+  background: var(--surface);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #a78bfa);
+  border-radius: 4px;
+  transition: width 0.25s ease;
+}
+
+.progress-text {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- HUD Header ---------- */
+#hud-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 18px 26px;
+  background: linear-gradient(180deg, rgba(11, 13, 19, 0.85) 0%, transparent 100%);
+  pointer-events: none;
+  user-select: none;
+}
+
+#scene-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+#scene-subtitle {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-dim);
+}
+
+/* ---------- Controls Hint ---------- */
+#controls-hint {
+  position: fixed;
+  bottom: 64px;
+  right: 22px;
+  z-index: 20;
+}
+
+#controls-toggle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+#controls-toggle:hover {
+  background: var(--surface-alt);
+  box-shadow: 0 0 18px var(--accent-glow);
+  transform: scale(1.08);
+}
+
+#controls-panel {
+  position: absolute;
+  bottom: 50px;
+  right: 0;
+  width: 240px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 8px 36px rgba(0, 0, 0, 0.45);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform-origin: bottom right;
+}
+
+#controls-panel.hidden {
+  opacity: 0;
+  transform: scale(0.92) translateY(6px);
+  pointer-events: none;
+}
+
+#controls-panel h2 {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+#controls-panel ul {
+  list-style: none;
+}
+
+#controls-panel li {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  padding: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#controls-panel kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  padding: 2px 6px;
+  font-size: 0.72rem;
+  font-family: var(--font);
+  font-weight: 600;
+  background: rgba(108, 140, 255, 0.1);
+  color: var(--accent);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+/* ---------- Info Bar (Footer) ---------- */
+#info-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 26px;
+  background: linear-gradient(0deg, rgba(11, 13, 19, 0.85) 0%, transparent 100%);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  pointer-events: none;
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#hud-header {
+  animation: fadeInUp 0.6s ease 0.3s both;
+}
+
+#info-bar {
+  animation: fadeInUp 0.5s ease 0.5s both;
+}
+
+#controls-hint {
+  animation: fadeInUp 0.5s ease 0.7s both;
+}

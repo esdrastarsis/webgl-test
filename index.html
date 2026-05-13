@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Visualizador 3D interativo com Three.js — carregue e explore modelos 3D do Sketchfab com controles de câmera completos." />
+  <title>Visualizador 3D — Three.js + Sketchfab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- ============ Loading Overlay ============ -->
+  <div id="loading-overlay">
+    <div class="loader-content">
+      <div class="spinner"></div>
+      <p class="loader-text">Carregando modelo 3D…</p>
+      <div class="progress-bar-track">
+        <div id="progress-bar" class="progress-bar-fill"></div>
+      </div>
+      <p id="progress-text" class="progress-text">0 %</p>
+    </div>
+  </div>
+
+  <!-- ============ HUD / UI Overlay ============ -->
+  <header id="hud-header">
+    <h1 id="scene-title">Visualizador 3D</h1>
+    <span id="scene-subtitle">Three.js + Sketchfab</span>
+  </header>
+
+  <!-- Controls help tooltip -->
+  <div id="controls-hint">
+    <button id="controls-toggle" aria-label="Mostrar controles">?</button>
+    <div id="controls-panel" class="hidden">
+      <h2>Controles</h2>
+      <ul>
+        <li><kbd>LMB</kbd> Arrastar — Rotacionar</li>
+        <li><kbd>RMB</kbd> Arrastar — Pan</li>
+        <li><kbd>Scroll</kbd> — Zoom</li>
+        <li><kbd>R</kbd> — Resetar câmera</li>
+        <li><kbd>G</kbd> — Alternar grid</li>
+        <li><kbd>W</kbd> — Wireframe</li>
+        <li><kbd>L</kbd> — Alternar luzes</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ Info bar (bottom) ============ -->
+  <footer id="info-bar">
+    <span id="fps-counter">-- FPS</span>
+    <span id="model-info"></span>
+  </footer>
+
+  <!-- ============ WebGL Canvas ============ -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
